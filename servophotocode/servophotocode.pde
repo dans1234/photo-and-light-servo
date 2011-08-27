@@ -56,4 +56,4 @@ servomotor3.write(ServoOutput);                           //Tells Servo Motor 3 
 
 delay (100);                                              // Delays the time it takes for the servo to move to the position.
 
-}
+}                                                         // Close / end 
