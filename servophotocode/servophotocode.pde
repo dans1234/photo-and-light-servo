@@ -1,9 +1,10 @@
+
 // Code for servo to move to pre-determined angle via servo rotation. 
 // initial sourced from Circ-09 and Circ-04 arduino and made to fit application.
 // As well as code from the arduino playgroud - http://www.arduino.cc/playground/ComponentLib/Servo
 
 #include <Servo.h>              // Initial setup - Telling Arduino that Servo code will be sourced.
-// #include <Firmata.h>
+#include <Firmata.h>
 
                                  // Beginning of Int / Servo Fields that link to different fields or start at a 0 value.
 
@@ -11,10 +12,14 @@ int photoResistor = 1;                                  // This tells Arduino to
 int photoLightValue = 0;                                // This sets the initial value of light to 0.
 int temperaturePin = 0;                                 // This tells Arduino to source the Temperature sensor from analogue pin 1 on the board.
 
+const int RED_LED_PIN = 9;
+const int GREEN_LED_PIN = 10;
+const int BLUE_LED_PIN = 11;
 
-//   int redIntensity = 0;
-//  int greenIntensity = 0;
-// int blueIntensity = 0;
+
+  int redIntensity = 0;
+ int greenIntensity = 0;
+ int blueIntensity = 0;
 
 
 
@@ -38,9 +43,9 @@ void setup()                                             // Begining of Construc
 
 {
                                                          // Used at the start for returning of a value's via the serial moniter.
-    //Firmata.setFirmwareVersion(0, 1);
-   // Firmata.begin(57600);
- Serial.begin(9600); 
+Firmata.setFirmwareVersion(0, 1);
+Firmata.begin(57600);
+// Serial.begin(9600); 
   
  pinMode(ledPin, OUTPUT);
 
@@ -59,12 +64,12 @@ void loop()                     // Begining of Method - Linking the Servo's rota
 
 photoLightValue = analogRead(photoResistor);             //The Photoresistor is told to read the level of light.
 
-//Firmata.sendAnalog(1, photoLightValue);
-Serial.println(photoLightValue);                           //This Prints the level of light that is being picked up by the photo resistor and places it in the serial moniter.
+Firmata.sendAnalog(1, photoLightValue);
+// Serial.println(photoLightValue);                           //This Prints the level of light that is being picked up by the photo resistor and places it in the serial moniter.
 
 
 ServoOutput = map(photoLightValue, 100, 600, 0, 120);   // This sets the output of the servo motor to be at a different rotation dependant on light value, the angle of motor has been derived from trial and error.
-Serial.println(ServoOutput);
+// Serial.println(ServoOutput);
 
 
 
@@ -94,21 +99,61 @@ delay (100);                                              // Delays the time it 
  temperature = (temperature - .5) * 100;          //converting from 10 mv per degree wit 500 mV offset
                                                   //to degrees ((volatge - 500mV) times 100)
  
- //  if (temperature <=15 ) {
- //  redIntensity = 0;
- //  greenIntensity = 0;
- //  blueIntensity = 0;
-// }
+ 
+   if (temperature <=21) {
+  analogWrite(RED_LED_PIN, redIntensity = 0);
+  analogWrite(GREEN_LED_PIN, greenIntensity = 0);
+ analogWrite(BLUE_LED_PIN, blueIntensity = 255);
+ }
+ 
+ if (temperature =22) {
+  analogWrite(RED_LED_PIN, redIntensity = 0);
+  analogWrite(GREEN_LED_PIN, greenIntensity = 255);
+ analogWrite(BLUE_LED_PIN, blueIntensity = 0);
+ }
+ 
+  if (temperature =23) {
+  analogWrite(RED_LED_PIN, redIntensity = 155);
+  analogWrite(GREEN_LED_PIN, greenIntensity = 50);
+ analogWrite(BLUE_LED_PIN, blueIntensity = 0);
+ }
+ 
+ if (temperature =24) {
+  analogWrite(RED_LED_PIN, redIntensity = 105);
+  analogWrite(GREEN_LED_PIN, greenIntensity = 70);
+ analogWrite(BLUE_LED_PIN, blueIntensity = 0);
+ }
+ 
+  if (temperature =25) {
+  analogWrite(RED_LED_PIN, redIntensity = 255);
+  analogWrite(GREEN_LED_PIN, greenIntensity = 0);
+ analogWrite(BLUE_LED_PIN, blueIntensity = 0);
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
     
  
-// Firmata.sendAnalog(0, temperature);                  //printing the result
+Firmata.sendAnalog(0, temperature);                  //printing the result
  delay(1000);                                     //waiting a second
 
  
 
     
+// Serial.println(temperature);
 
-// test update 222
 
 
 
@@ -129,5 +174,8 @@ delay (100);                                              // Delays the time it 
  */
 float getVoltage(int pin){
  return (analogRead(pin) * .004882814); //converting from a 0 to 1024 digital range
+
                                         // to 0 to 5 volts (each 1 reading equals ~ 5 millivolts
 }
+
+
